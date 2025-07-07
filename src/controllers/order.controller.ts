@@ -142,3 +142,27 @@ export const updateStatus = asyncHandler(
 );
 
 // user cancel order
+export const cancelOrderByUser = asyncHandler(async(req: Request, res: Response) =>{
+  const {id} = req.params
+  const userId = req.user._id
+  const order = await Order.findById(id)
+  if(!order){
+    throw new CustomError("Order not found", 404)
+  }
+
+  if(order.user?.toString() !== userId.toString()){
+    throw new CustomError("You are not authorized to cancel this order", 403)
+  }
+
+  order.status = "Canceled";
+
+  await order.save()
+
+  res.status(200).json({
+    message: "Order canceled successfully",
+    status: "success",
+    success: true,
+    data: order,
+  });
+
+})
