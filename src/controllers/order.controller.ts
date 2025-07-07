@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/async-handler.utils";
 import Product from "../models/product.model";
 import Order from "../models/order.model";
 import CustomError from "../middlewares/error-handler.middleware";
+import { OrderStatus } from "../types/global.types";
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user._id;
@@ -154,7 +155,7 @@ export const cancelOrderByUser = asyncHandler(async(req: Request, res: Response)
     throw new CustomError("You are not authorized to cancel this order", 403)
   }
 
-  order.status = "Canceled";
+  order.status = OrderStatus.CANCELED;
 
   await order.save()
 
