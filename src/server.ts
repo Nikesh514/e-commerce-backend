@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { connectDB } from './config/db-connect';
 import CustomError, { errorHandler } from './middlewares/error-handler.middleware';
 import cookieParser from 'cookie-parser';
+import brandRoutes from './routes/brand.routes';
 
 
 //importing routes
@@ -42,6 +43,7 @@ app.use('/api/category', categoryRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/wishlist', wishlistRoutes)
+app.use('/api/brand', brandRoutes)
 
 
 app.all('/{*spalt}', (req:Request, res:Response, next:NextFunction)=>{
