@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import Product from "../models/product.model";
 import CustomError from "../middlewares/error-handler.middleware";
-import path from "path"
+// import path from "path"
 import Category from "../models/category.model";
 import { removeImages } from "../config/cloudinary.config";
-import { IImages } from "../types/global.types";
+// import { IImages } from "../types/global.types";
 
 
 
