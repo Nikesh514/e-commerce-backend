@@ -38,6 +38,27 @@ export const create = asyncHandler(async(req: Request, res: Response) => {
 })
 
 export const getAll = asyncHandler(async(req:Request, res:Response)=>{
+
+    const { query } = req.query
+    const filter: Record <string, any> = {}
+
+    if (query) {
+        filter.$or = [
+            {
+                name: {
+                    $regex: query,
+                    $options: 'i'
+                },
+            },
+            {
+                description: {
+                    $regex: query,
+                    $options: 'i'
+                }
+            }
+        ]
+    }
+
     const brands = await Brand.find()
     res.status(200).json({
         status: 'success',

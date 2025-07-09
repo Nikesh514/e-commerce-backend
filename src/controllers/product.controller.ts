@@ -71,13 +71,13 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
             {
                 name: {
                     $regex: 'name',
-                    $option: 'i'
+                    $options: 'i'
                 },
             },
             {
-                descrition: {
+                description: {
                     $regex: 'name',
-                    $option: 'i'
+                    $options: 'i'
                 }
             }
         ]
