@@ -5,6 +5,7 @@ import CustomError from "../middlewares/error-handler.middleware";
 // import path from "path"
 import Category from "../models/category.model";
 import { removeImages } from "../config/cloudinary.config";
+import { getPagination } from "../utils/pagination.utils";
 // import { IImages } from "../types/global.types";
 
 
@@ -61,10 +62,14 @@ export const create = asyncHandler(async (req:Request, res:Response)=>{
 
 export const getAll = asyncHandler(async(req:Request, res:Response)=>{
 
-    const {query,minPrice,maxPrice,category} = req.query
+    const {query,minPrice,maxPrice,category,brand,page,limit} = req.query
     const filter:Record<string,any> = {}
 
-    console.log(query)
+    // pagination
+    const perPage = parseInt(limit as string) ?? 10
+    const currentPage = parseInt(page as string) ?? 1
+    // calculate skip
+    const skip = (currentPage - 1) * perPage
 
     if (query) {
         filter.$or = [
@@ -85,6 +90,10 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
 
     if(category) {
         filter.category = category
+    }
+
+    if(brand) {
+        filter.brand = brand
     }
 
     if(minPrice || maxPrice) {
@@ -108,12 +117,20 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
     }
 
 
-    const products = await Product.find(filter).populate("category");
+    const products = await Product.find(filter).limit(perPage).skip(skip).sort({createdAt:-1}).populate("category");
+
+    const totalData = await Product.countDocuments(filter)
+
+    const pagination = getPagination(totalData, perPage, currentPage)
+
     res.status(200).json({
         status: 'success',
         success: true,
         message: 'Products fetched successfully',
-        data: products
+        data: {
+            data: products,
+            pagination
+        }
     })
 })
 
