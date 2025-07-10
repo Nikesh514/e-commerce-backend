@@ -4,7 +4,6 @@ import { compare, hash } from "../utils/bcrypt.utils";
 import CustomError from "../middlewares/error-handler.middleware";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { generateToken } from "../utils/jwt.utils";
-import { useTransform } from "framer-motion";
 
 // register
 export const register = asyncHandler(async (req: Request, res: Response) => {
