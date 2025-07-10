@@ -61,7 +61,7 @@ export const create = asyncHandler(async (req:Request, res:Response)=>{
 
 export const getAll = asyncHandler(async(req:Request, res:Response)=>{
 
-    const {query,minPrice,maxPrice} = req.query
+    const {query,minPrice,maxPrice,category} = req.query
     const filter:Record<string,any> = {}
 
     console.log(query)
@@ -83,6 +83,10 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
         ]
     }
 
+    if(category) {
+        filter.category = category
+    }
+
     if(minPrice || maxPrice) {
         
         if(minPrice && maxPrice){
@@ -102,6 +106,7 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
             }
         }
     }
+
 
     const products = await Product.find(filter).populate("category");
     res.status(200).json({

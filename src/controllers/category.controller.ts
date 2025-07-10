@@ -29,6 +29,28 @@ export const create = asyncHandler(async (req:Request, res:Response) => {
 
 export const getAll = asyncHandler(async (req:Request, res:Response)=>{
 
+    const {query} = req.query
+    const filter:Record<string,any> = {}
+
+    console.log(query)
+
+    if (query) {
+        filter.$or = [
+            {
+                name: {
+                    $regex: 'name',
+                    $options: 'i'
+                },
+            },
+            {
+                description: {
+                    $regex: 'name',
+                    $options: 'i'
+                }
+            }
+        ]
+    }
+
     const categories  = await Category.find()
 
     res.status(200).json({
