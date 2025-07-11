@@ -76,7 +76,7 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
             {
                 name: {
                     $regex: 'name',
-                    $options: 'i'
+                    $options: 'i' 
                 },
             },
             {
@@ -116,9 +116,9 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
         }
     }
 
-
-    const products = await Product.find(filter).limit(perPage).skip(skip).sort({createdAt:-1}).populate("category");
-
+  
+    const products = await Product.find(filter).limit(perPage).skip(skip).sort({createdAt: -1}).populate("category");
+    
     const totalData = await Product.countDocuments(filter)
 
     const pagination = getPagination(totalData, perPage, currentPage)

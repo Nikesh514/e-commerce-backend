@@ -3,6 +3,8 @@ import { asyncHandler } from "../utils/async-handler.utils";
 import CustomError from "../middlewares/error-handler.middleware";
 import Brand from "../models/brand.model";
 import { removeImages } from "../config/cloudinary.config";
+import { getPagination } from "../utils/pagination.utils";
+
 
 
 
@@ -39,8 +41,14 @@ export const create = asyncHandler(async(req: Request, res: Response) => {
 
 export const getAll = asyncHandler(async(req:Request, res:Response)=>{
 
-    const { query } = req.query
+    const { query, limit, page } = req.query
     const filter: Record <string, any> = {}
+
+    // pagination
+    const perPage = parseInt(limit as string) ?? 10
+    const currentPage = parseInt(page as string) || 1
+
+    const skip = (currentPage - 1) * perPage
 
     if (query) {
         filter.$or = [
@@ -58,8 +66,12 @@ export const getAll = asyncHandler(async(req:Request, res:Response)=>{
             }
         ]
     }
+    const brands = await Brand.find(filter).limit(perPage).skip(skip).sort({ createdAt: -1 }).populate('logo')
 
-    const brands = await Brand.find()
+    const totalData  = await Brand.countDocuments(filter)
+
+    const pagination = getPagination(totalData, perPage, currentPage)
+    
     res.status(200).json({
         status: 'success',
         success: true,
