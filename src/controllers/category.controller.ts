@@ -29,10 +29,17 @@ export const create = asyncHandler(async (req:Request, res:Response) => {
 
 export const getAll = asyncHandler(async (req:Request, res:Response)=>{
 
-    const {query} = req.query
+    const {query, limit, page} = req.query
     const filter:Record<string,any> = {}
 
-    console.log(query)
+    // pagination
+    const perPage = parseInt(limit as string) || 10
+    const currentPage = parseInt(page as string) || 1
+
+    // calculate skip
+    const skip = (currentPage - 1) * perPage
+
+
 
     if (query) {
         filter.$or = [
@@ -51,7 +58,7 @@ export const getAll = asyncHandler(async (req:Request, res:Response)=>{
         ]
     }
 
-    const categories  = await Category.find()
+    const categories  = await Category.find().limit(perPage).skip(skip).sort({ createdAt: -1 }).populate('products')
 
     res.status(200).json({
         message: 'all category fetched',

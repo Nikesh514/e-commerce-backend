@@ -4,6 +4,7 @@ import Product from "../models/product.model";
 import Order from "../models/order.model";
 import CustomError from "../middlewares/error-handler.middleware";
 import { OrderStatus } from "../types/global.types";
+import { getPagination } from "../utils/pagination.utils";
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user._id;
@@ -48,12 +49,19 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
 });
 
 // get all orders (only admin)
-export const getAllOrders = asyncHandler(
-  async (req: Request, res: Response) => {
-    const allOrders = await Order.find()
-      .populate("user", "-password")
-      .populate("items.product")
-      .sort({ createdAt: -1 });
+export const getAllOrders = asyncHandler(async (req: Request, res: Response) => {
+
+  const { query, limit, page } = req.query
+
+  // pagination
+  const perPage = parseInt(limit as string) || 10
+  const currentPage = parseInt(page as string) || 1
+  const skip = (currentPage - 1) * perPage
+
+    const allOrders = await Order.find().populate("user", "-password").populate("items.product").sort({ createdAt: -1 });
+  
+    const totalData = await Order.countDocuments()
+    const pagination = getPagination(totalData, perPage, currentPage)
 
     res.status(200).json({
       message: "All orders fetched",
