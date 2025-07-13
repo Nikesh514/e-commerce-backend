@@ -48,7 +48,7 @@ app.use('/api/brand', brandRoutes)
 
 app.all('/{*spalt}', (req:Request, res:Response, next:NextFunction)=>{
 
-    const message = `cannot {req.method} on ${req.url}`
+    const message = `cannot ${req.method} on ${req.url}`
 
     const error = new CustomError(message, 404)
 
