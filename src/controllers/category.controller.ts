@@ -5,6 +5,7 @@ import CustomError from "../middlewares/error-handler.middleware";
 
 
 
+
 // post catogary
 export const create = asyncHandler(async (req:Request, res:Response) => {
 
@@ -59,6 +60,7 @@ export const getAll = asyncHandler(async (req:Request, res:Response)=>{
     }
 
     const categories  = await Category.find().limit(perPage).skip(skip).sort({ createdAt: -1 }).populate('products')
+
 
     res.status(200).json({
         message: 'all category fetched',

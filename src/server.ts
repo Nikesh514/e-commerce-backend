@@ -5,6 +5,7 @@ import { connectDB } from './config/db-connect';
 import CustomError, { errorHandler } from './middlewares/error-handler.middleware';
 import cookieParser from 'cookie-parser';
 import brandRoutes from './routes/brand.routes';
+import { sendEmail } from './utils/nodemailer.utils';
 
 
 //importing routes

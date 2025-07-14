@@ -38,4 +38,10 @@ export interface JWTPayloadDecoded {
     iat?: number;
     exp?: number;
   }
+
+  export interface EmailOptions {
+    to: string;
+    subject: string;
+    html: string;
+  }
   
