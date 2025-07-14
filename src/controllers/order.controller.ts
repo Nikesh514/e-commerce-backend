@@ -5,9 +5,11 @@ import Order from "../models/order.model";
 import CustomError from "../middlewares/error-handler.middleware";
 import { OrderStatus } from "../types/global.types";
 import { getPagination } from "../utils/pagination.utils";
+import { sendEmail } from "../utils/nodemailer.utils";
+import { order_confirmation_html } from "../utils/html.utils";
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
-  const user = req.user._id;
+  const {_id:user, email } = req.user;
   const { items } = req.body;
 
   const orderItems: { product: string; quantity: number }[] = JSON.parse(items);
@@ -39,6 +41,10 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
   const order = new Order({ user, items: filteredItems, totalAmount });
 
   const newOrder = await (await order.save()).populate("items.product");
+
+
+
+  await sendEmail({to:email,subject:'Order Placed Successfully',html:order_confirmation_html(newOrder.items,Number(totalAmount),req.user,order,req)})
 
   res.status(201).json({
     message: "Order placed successfully",
