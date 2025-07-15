@@ -11,7 +11,7 @@ const router = express_1.default.Router();
 // category post route
 router.post('/', (0, authenticate_middleware_1.authenticate)([global_types_1.Role.ADMIN]), category_controller_1.create);
 // get all categories
-router.get('/', (0, authenticate_middleware_1.authenticate)([global_types_1.Role.ADMIN]), category_controller_1.getAll);
+router.get('/', category_controller_1.getAll);
 // get by id
 router.get('/:id', category_controller_1.getById);
 //update category
