@@ -6,7 +6,7 @@ import CustomError, { errorHandler } from './middlewares/error-handler.middlewar
 import cookieParser from 'cookie-parser';
 import brandRoutes from './routes/brand.routes';
 import { sendEmail } from './utils/nodemailer.utils';
-
+import cors from 'cors';
 
 //importing routes
 import authRoutes from './routes/auth.routes';
@@ -21,6 +21,10 @@ const DB_URI = process.env.DB_URI ?? ''
 
 // connecting database
 connectDB(DB_URI);
+
+app.use(cors({
+    origin:'*'
+}))
 
 // using middlewares
 // to set security headers / removes insecure headers
