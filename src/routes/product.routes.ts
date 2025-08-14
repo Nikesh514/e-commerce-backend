@@ -4,11 +4,14 @@ import { authenticate } from '../middlewares/authenticate.middleware';
 import { onlyAdmin } from '../types/global.types';
 
 import {uploader} from '../middlewares/file-uploader.middleware';
+import { getFeaturedProducts } from '../controllers/product.controller';
 
 const upload  = uploader()
 const router = express.Router()
 
 router.get('/', getAll)
+
+router.get('/featured', getFeaturedProducts)
 
 router.get('/:id', getById)
 

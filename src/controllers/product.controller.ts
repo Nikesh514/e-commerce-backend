@@ -261,3 +261,17 @@ export const remove = asyncHandler(async (req:Request, res:Response)=>{
         data: product
     })
 })
+
+//? get all featured products
+export const getFeaturedProducts = asyncHandler(async(req:Request,res:Response)=>{
+ 
+    const featured = await Product.find({isFeatured:true}).populate('category')
+   
+    res.status(200).json({
+      status:'success',
+      success:true,
+      message:'Featured products fetched successfully',
+      data:featured
+    })
+   
+  });

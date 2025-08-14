@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remove = exports.update = exports.getById = exports.getAll = exports.create = void 0;
+exports.getFeaturedProducts = exports.remove = exports.update = exports.getById = exports.getAll = exports.create = void 0;
 const async_handler_utils_1 = require("../utils/async-handler.utils");
 const product_model_1 = __importDefault(require("../models/product.model"));
 const error_handler_middleware_1 = __importDefault(require("../middlewares/error-handler.middleware"));
@@ -219,5 +219,15 @@ exports.remove = (0, async_handler_utils_1.asyncHandler)((req, res) => __awaiter
         success: true,
         message: 'product fetched successfully',
         data: product
+    });
+}));
+//? get all featured products
+exports.getFeaturedProducts = (0, async_handler_utils_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const featured = yield product_model_1.default.find({ isFeatured: true }).populate('category');
+    res.status(200).json({
+        status: 'success',
+        success: true,
+        message: 'Featured products fetched successfully',
+        data: featured
     });
 }));

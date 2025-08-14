@@ -8,9 +8,11 @@ const category_controller_1 = require("../controllers/category.controller");
 const authenticate_middleware_1 = require("../middlewares/authenticate.middleware");
 const global_types_1 = require("../types/global.types");
 const file_uploader_middleware_1 = require("../middlewares/file-uploader.middleware");
+const product_controller_1 = require("../controllers/product.controller");
 const upload = (0, file_uploader_middleware_1.uploader)();
 const router = express_1.default.Router();
 router.get('/', category_controller_1.getAll);
+router.get('/featured', product_controller_1.getFeaturedProducts);
 router.get('/:id', category_controller_1.getById);
 router.post('/', (0, authenticate_middleware_1.authenticate)(global_types_1.onlyAdmin), upload.fields([
     { name: 'coverImage', maxCount: 1 },
