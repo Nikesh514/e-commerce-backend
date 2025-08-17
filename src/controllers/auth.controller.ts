@@ -101,8 +101,10 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     .status(200)
     .cookie("access_token", token, {
       httpOnly: true,
-      maxAge: Number(process.env.COOKIE_EXPIRES_IN || 1) * 24 * 60 * 60 * 1000,
-      secure: false,
+      maxAge: 
+        parseInt(process.env.JWT_COOKIE_EXPIRES_IN ?? "1")* 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === 'development' ? false : true,
+        sameSite: "none"
     })
     .json({
       message: "Login success",
@@ -115,6 +117,14 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
-function next(error: any) {
-  throw new Error("Function not implemented.");
-}
+export const logout = asyncHandler(async(req: Request, res: Response) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'development' ? false : true,
+    sameSite: 'none'
+  }).status(200).json({
+    message: 'Logged Out successfully',
+    success: true,
+    status: 'success'
+  })
+})
